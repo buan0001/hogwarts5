@@ -166,7 +166,7 @@ class StudentTest {
     }
 
     @Test
-    void capitalizeIndividualNames(){
+    void capitalizeIndividualNamesWithMultipleMiddleNames(){
         //arrange
         Student student = new Student("first", "middle", "last", null, 1);
         String expected = "First Middle Last";
@@ -188,6 +188,16 @@ class StudentTest {
 
         //act
         student.setFullName("fIrSt mIdDlE lAsT");
+
+        //assert
+        assertEquals(expected, student.getFullName());
+    }
+
+    @Test
+    void createStudentFromFullname(){
+        //arrange & act
+        Student student = new Student("first middle1 middle2 last", null, 1);
+        String expected = "First Middle1 Middle2 Last";
 
         //assert
         assertEquals(expected, student.getFullName());

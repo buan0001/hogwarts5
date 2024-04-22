@@ -25,6 +25,12 @@ public class Student {
         this(firstName, null, lastName, house, schoolYear);
     }
 
+    public Student(String fullName, House house, int schoolYear) {
+        this.setFullName(fullName);
+        this.house = house;
+        this.schoolYear = schoolYear;
+    }
+
     public Student(String firstName, String middleName, String lastName, House house, int schoolYear) {
         this.firstName = firstName;
         this.middleName = middleName;
@@ -46,7 +52,7 @@ public class Student {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = capitalize( firstName);
     }
 
     public String getMiddleName() {
@@ -54,7 +60,7 @@ public class Student {
     }
 
     public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+        this.middleName = capitalize( middleName);
     }
 
     public String getLastName() {
@@ -62,7 +68,7 @@ public class Student {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = capitalize( lastName);
     }
 
     public House getHouse() {
@@ -102,10 +108,11 @@ public class Student {
         if (names.length > 2) {
             // middleName = names[1];
             StringBuilder correctMiddle = new StringBuilder();
+
             for (int i = 1; i < names.length-1; i++) {
-                correctMiddle.append(capitalize(names[i])).append(" ");
+                correctMiddle.append(names[i]).append(" ");
             }
-            middleName = correctMiddle.toString().trim();
+            middleName = capitalize(correctMiddle.toString().trim());
             lastName = capitalize(names[names.length - 1]) ;
         } else if (names.length > 1) {
             middleName = null;
@@ -132,6 +139,17 @@ public class Student {
     }
 
     private String capitalize(String name) {
+        if (name == null ) {
+            return null;
+        }
+        if (name.isEmpty()) {
+            return "";
+        }
+        if (name.contains(" ")){
+            int space = name.indexOf(" ");
+            return capitalize(name.substring(0, space)) + " " + capitalize(name.substring(space+1));
+        }
+
         return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
     }
 }
