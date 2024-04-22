@@ -1,5 +1,6 @@
 package dk.kea.dat3js.hogwarts5.teachers;
 
+import dk.kea.dat3js.hogwarts5.common.PersonWithNames;
 import dk.kea.dat3js.hogwarts5.house.House;
 import jakarta.persistence.*;
 
@@ -7,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-public class Teacher {
+public class Teacher implements PersonWithNames {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
@@ -27,9 +28,16 @@ public class Teacher {
   }
 
   public Teacher(String firstName, String middleName, String lastName, House house, String mainSubject, LocalDate employmentDate) {
-    this.firstName = firstName;
-    this.middleName = middleName;
-    this.lastName = lastName;
+    this.firstName = capitalize( firstName);
+    this.middleName = capitalize( middleName);
+    this.lastName = capitalize( lastName);
+    this.house = house;
+    this.mainSubject = mainSubject;
+    this.employmentDate = employmentDate;
+  }
+
+  public Teacher(String fullName, House house, String mainSubject, LocalDate employmentDate) {
+    this.setFullName(fullName);
     this.house = house;
     this.mainSubject = mainSubject;
     this.employmentDate = employmentDate;
