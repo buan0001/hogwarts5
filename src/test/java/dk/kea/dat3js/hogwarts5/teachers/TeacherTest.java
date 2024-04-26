@@ -111,6 +111,7 @@ class TeacherTest {
         assertEquals("Albus", teacher.getFirstName());
         assertEquals("Percival Wulfric Brian", teacher.getMiddleName());
         assertEquals("Dumbledore", teacher.getLastName());
+        assertEquals("Albus Percival Wulfric Brian Dumbledore", teacher.getFullName());
     }
 
     @Test

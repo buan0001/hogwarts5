@@ -52,7 +52,6 @@ class StudentTest {
     void setFullNameWithSingleMiddleName() {
         //arrange
         Student student = new Student("first", "middle", "last", null, 1);
-        String expected = "Harry James Potter";
 
         //act
         student.setFullName("Harry James Potter");
@@ -69,7 +68,6 @@ class StudentTest {
     void setFullNameWithNullMiddleName() {
         //arrange
         Student student = new Student("first", "middle", "last", null, 1);
-        String expected = "Harry Potter";
 
         //act
         student.setFullName("Harry Potter");

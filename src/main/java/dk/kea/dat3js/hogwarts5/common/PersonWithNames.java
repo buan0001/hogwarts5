@@ -1,6 +1,7 @@
 package dk.kea.dat3js.hogwarts5.common;
 
 import java.util.Arrays;
+import java.util.List;
 
 public interface PersonWithNames {
     String getFirstName();
@@ -21,8 +22,10 @@ public interface PersonWithNames {
             System.out.println("Name cannot be empty or null");
             return "Name cannot be empty or null";
         }
+
         String[] names = fullName.split(" ");
         // remove empty strings
+
         names = Arrays.stream(names).filter(s -> !s.isEmpty()).toArray(String[]::new);
         if (names.length < 1) {
             System.out.println("Name must contain at least 1 part");
