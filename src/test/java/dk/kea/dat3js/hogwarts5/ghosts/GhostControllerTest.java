@@ -29,7 +29,7 @@ class GhostControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-private void setupMockHouses() {
+public void setupMockHouses() {
     when(houseRepository.findById("Gryffindor")).thenReturn(java.util.Optional.of(new dk.kea.dat3js.hogwarts5.house.House("Gryffindor","Godric Gryffindor", new String[]{"red", "gold"})));
     when(houseRepository.findById("Ravenclaw")).thenReturn(java.util.Optional.of(new dk.kea.dat3js.hogwarts5.house.House("Ravenclaw","Rowena Ravenclaw", new String[]{"blue", "bronze"})));
     when(houseRepository.findById("Hufflepuff")).thenReturn(java.util.Optional.of(new dk.kea.dat3js.hogwarts5.house.House("Hufflepuff","Helga Hufflepuff", new String[]{"yellow", "black"})));
