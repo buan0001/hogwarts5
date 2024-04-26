@@ -65,6 +65,8 @@ public class PrefectService {
     }
 
     public boolean isPrefectChangeAllowed(Student student) {
+        System.out.println("Checking if prefect change is allowed");
+        System.out.println("Student's prefect status: " + student.isPrefect());
         if (!student.isPrefect()) {
             System.out.println("Student is not a prefect but will attempt to become one");
             // Check if the student is at or above year 5
@@ -89,6 +91,7 @@ public class PrefectService {
                 return false;
             }
         }
+        System.out.println("Prefect change allowed");
         return true;
     }
 }

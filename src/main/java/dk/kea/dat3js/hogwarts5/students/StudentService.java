@@ -113,7 +113,9 @@ public class StudentService {
         Optional<Student> existingStudent = studentRepository.findById(id);
         if (existingStudent.isPresent()) {
             Student studentToUpdate = existingStudent.get();
-            if (!studentToUpdate.isPrefect() && !prefectService.isPrefectChangeAllowed(studentToUpdate)) {
+            //boolean isPrefectAllowed = isPrefectChangeAllowed(studentToUpdate);
+            boolean isPrefectAllowed = prefectService.isPrefectChangeAllowed(studentToUpdate);
+            if (!studentToUpdate.isPrefect() && !isPrefectAllowed) {
                 System.out.println("Prefect change not allowed");
                 return Optional.empty();
             }
@@ -126,5 +128,33 @@ public class StudentService {
             System.out.println("Student not found");
             return Optional.empty();
         }
+    }
+    public boolean isPrefectChangeAllowed(Student student) {
+        if (!student.isPrefect()) {
+            System.out.println("Student is not a prefect but will attempt to become one");
+            // Check if the student is at or above year 5
+            if (student.getSchoolYear() < 5) {
+                System.out.println("Student is not at or above year 5");
+                return false;
+            }
+
+            // Check if house already has two prefects - if the student to update is not already a prefect they will attempt to become one, which must fail
+            List<Student> prefectsInHouse = studentRepository.findAllByHouseNameAndPrefectIsTrue(student.getHouse().getName());
+            System.out.println("Prefects in house: " + prefectsInHouse.size());
+
+            if (prefectsInHouse.size() == 2) {
+                System.out.println("House already has two prefects");
+                return false;
+            }
+
+            // If there's already a prefect in the house of the same gender, also deny the request
+            boolean sameGenderPrefectExists = prefectsInHouse.stream().anyMatch(prefect -> prefect.getGender().equalsIgnoreCase(student.getGender()));
+            if (sameGenderPrefectExists) {
+                System.out.println("House already has a prefect of that gender");
+                return false;
+            }
+        }
+        System.out.println("Prefect change allowed");
+        return true;
     }
 }
