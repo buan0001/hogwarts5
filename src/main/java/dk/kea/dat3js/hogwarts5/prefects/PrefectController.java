@@ -32,7 +32,7 @@ public class PrefectController {
     }
 
     @PostMapping
-    public Student promoteToPrefect(@RequestBody Student prefect){
+    public ResponseEntity<Student> promoteToPrefect(@RequestBody Student prefect){
         return prefectService.promoteToPrefect(prefect);
     }
 

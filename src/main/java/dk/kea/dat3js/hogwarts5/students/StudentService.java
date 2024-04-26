@@ -1,6 +1,7 @@
 package dk.kea.dat3js.hogwarts5.students;
 
 import dk.kea.dat3js.hogwarts5.house.HouseService;
+import dk.kea.dat3js.hogwarts5.prefects.PrefectService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +12,12 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final HouseService houseService;
 
-    public StudentService(StudentRepository studentRepository, HouseService houseService) {
+    private final PrefectService prefectService;
+
+    public StudentService(StudentRepository studentRepository, HouseService houseService, PrefectService prefectService) {
         this.studentRepository = studentRepository;
         this.houseService = houseService;
+        this.prefectService = prefectService;
     }
 
     public List<StudentResponseDTO> findAll() {
@@ -109,13 +113,17 @@ public class StudentService {
         Optional<Student> existingStudent = studentRepository.findById(id);
         if (existingStudent.isPresent()) {
             Student studentToUpdate = existingStudent.get();
-            List<Student> prefectsInHouse = studentRepository.findAllByHouseNameAndPrefectIsTrue(studentToUpdate.getHouse().getName());
-            if (!studentToUpdate.isPrefect() && prefectsInHouse.size() == 2) {
+            if (!studentToUpdate.isPrefect() && !prefectService.isPrefectChangeAllowed(studentToUpdate)) {
+                System.out.println("Prefect change not allowed");
                 return Optional.empty();
             }
+
             studentToUpdate.setPrefect(!studentToUpdate.isPrefect());
             return Optional.of(toDTO(studentRepository.save(studentToUpdate)));
+
+
         } else {
+            System.out.println("Student not found");
             return Optional.empty();
         }
     }
