@@ -50,6 +50,11 @@ public class PrefectService {
     }
 
     public Student promoteToPrefect(Student prefect) {
-
+        if (!prefect.isPrefect()) {
+            prefect.setPrefect(true);
+            return studentRepository.save(prefect);
+        } else {
+            return prefect;
+        }
     }
 }

@@ -1,9 +1,11 @@
 package dk.kea.dat3js.hogwarts5.students;
 
+import dk.kea.dat3js.hogwarts5.ghosts.GhostController;
 import dk.kea.dat3js.hogwarts5.house.HouseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -13,13 +15,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 //@ActiveProfiles("test")
+
+@WebMvcTest(StudentService.class)
 class StudentServiceTest {
     List<Student> students;
     @MockBean
     private HouseRepository houseRepository;
 
-    @Autowired
-    private StudentService studentService;
+    @MockBean
+    private StudentRepository studentRepository;
 
 
     public void setupMockHouses() {
@@ -42,12 +46,14 @@ class StudentServiceTest {
     }
 
     @Test
-    void togglePrefectWithNonPrefectAndTwoPrefectsAlreadyInHouse() {
-
+    void togglePrefectWithNoOtherPrefects() {
+        StudentService studentService = new StudentService(studentRepository,null);
+        studentService.togglePrefect(1);
         //arrange
 
         //act
 
         //assert
+        assertTrue(students.getFirst().isPrefect());
     }
 }
