@@ -60,11 +60,18 @@ public interface PersonWithNames {
         if (name.isEmpty()) {
             return "";
         }
+        int startIndex = name.toLowerCase().contains("mc") ? 2 : 0;
         if (name.contains(" ")){
             int space = name.indexOf(" ");
+            if (startIndex == 2){
+                return "Mc" + capitalize(name.substring(2, space)) + " " + capitalize(name.substring(space+1));
+            }
             return capitalize(name.substring(0, space)) + " " + capitalize(name.substring(space+1));
         }
 
+        if (startIndex == 2 && name.toLowerCase().contains("mc")) {
+            return "Mc" + name.substring(2, 3).toUpperCase() + name.substring(3).toLowerCase();
+        }
         return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
     }
 }

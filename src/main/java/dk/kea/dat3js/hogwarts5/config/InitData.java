@@ -41,18 +41,18 @@ public class InitData implements CommandLineRunner {
     Set<Student> existingStudents = new HashSet<>();
     existingStudents.addAll(studentRepository.findAll());
 
-    Student harry = new Student("Harry", "James", "Potter", gryffindor, 5);
-    Student hermione = new Student("Hermione", "Jean", "Granger", gryffindor, 5);
-    Student ron = new Student("Ron", "Bilius", "Weasley", gryffindor, 5);
-    Student neville = new Student("Neville", "Frank", "Longbottom", gryffindor, 5);
-    Student ginny = new Student("Ginny", "Molly", "Weasley", gryffindor, 5);
-    Student fred = new Student("Fred", "Gideon", "Weasley", gryffindor, 5);
-    Student george = new Student("George", "Fabian", "Weasley", gryffindor, 5);
-    Student percy = new Student("Percy", "Ignatius", "Weasley", gryffindor, 5);
+    Student harry = new Student("Harry", "James", "Potter", gryffindor, 5, false, "male");
+    Student hermione = new Student("Hermione", "Jean", "Granger", gryffindor, 5,false, "female");
+    Student ron = new Student("Ron", "Bilius", "Weasley", gryffindor, 5,false,"male");
+    Student neville = new Student("Neville", "Frank", "Longbottom", gryffindor, 5,false,"male");
+    Student ginny = new Student("Ginny", "Molly", "Weasley", gryffindor, 5,false,"female");
+    Student fred = new Student("Fred", "Gideon", "Weasley", gryffindor, 5,false,"male");
+    Student george = new Student("George", "Fabian", "Weasley", gryffindor, 5,false,"male");
+    Student percy = new Student("Percy", "Ignatius", "Weasley", gryffindor, 5,false,"male");
 
-    Student draco = new Student("Draco", "", "Malfoy", slytherin, 5);
-    Student cedric = new Student("Cedric", "", "Diggory", hufflepuff, 6);
-    Student luna = new Student("Luna", "", "Lovegood", ravenclaw, 4);
+    Student draco = new Student("Draco", null, "Malfoy", slytherin, 5,false,"male");
+    Student cedric = new Student("Cedric", null, "Diggory", hufflepuff, 6,false,"male");
+    Student luna = new Student("Luna", null, "Lovegood", ravenclaw, 4,false,"female");
 
     existingStudents.addAll(List.of(harry, hermione, ron, neville, ginny, fred, george, percy, draco, cedric, luna));
     studentRepository.saveAll(existingStudents);
@@ -64,9 +64,9 @@ public class InitData implements CommandLineRunner {
     existingTeachers.addAll(teacherRepository.findAll());
 
     Teacher severus = new Teacher("Severus", "Prince", "Snape", slytherin, "Potions", LocalDate.of(1981, 11, 1));
-    Teacher minerva = new Teacher("Minerva", "", "McGonagall", gryffindor, "Transfiguration", LocalDate.of(1956, 12, 1));
-    Teacher filius = new Teacher("Filius", "", "Flitwick", ravenclaw, "Charms", LocalDate.of(1975, 9, 1));
-    Teacher pomona = new Teacher("Pomona", "", "Sprout", hufflepuff, "Herbology", LocalDate.of(1975, 9, 1));
+    Teacher minerva = new Teacher("Minerva", null, "McGonagall", gryffindor, "Transfiguration", LocalDate.of(1956, 12, 1));
+    Teacher filius = new Teacher("Filius", null, "Flitwick", ravenclaw, "Charms", LocalDate.of(1975, 9, 1));
+    Teacher pomona = new Teacher("Pomona", null, "Sprout", hufflepuff, "Herbology", LocalDate.of(1975, 9, 1));
     Teacher sybill = new Teacher("Sybill", "Cassandra", "Trelawney", ravenclaw, "Divination", LocalDate.of(1979, 9, 1));
     Teacher alastor = new Teacher("Alastor", "Mad-Eye", "Moody", gryffindor, "Defence Against the Dark Arts", LocalDate.of(1994, 9, 1));
 

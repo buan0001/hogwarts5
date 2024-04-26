@@ -143,14 +143,14 @@ class TeacherTest {
     @Test
     void setFullNameWithMultipleEmptyStrings(){
         //arrange
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
-        String expected = "first middle last";
+        Teacher teacher = new Teacher("first middle last", null, null, null);
+        String expected = "First Middle Last";
 
         //act
         teacher.setFullName("   ");
 
         //assert
-        assertEquals("first middle last", teacher.getFullName());
+        assertEquals(expected, teacher.getFullName());
     }
 
     @Test
@@ -202,6 +202,29 @@ class TeacherTest {
 
         //assert
         assertEquals(expected, teacher.getFullName());
+    }
+
+    @Test
+    void createTeacherFromFullNameWithMiddleNameStartingWithMc(){
+        //arrange & act
+        Teacher teacher = new Teacher("Minerva McGonnomid1 McGonnomid2 McGonnolast", null, null, null);
+
+
+        //assert
+        assertEquals("Minerva", teacher.getFirstName());
+        assertEquals("McGonnomid1 McGonnomid2", teacher.getMiddleName());
+        assertEquals("McGonnolast", teacher.getLastName());
+    }
+
+    @Test
+    void createTeacherFromFullNameWithSingleLowerCaseLetterName(){
+        //arrange & act
+        Teacher teacher = new Teacher("a", null, null, null);
+
+        //assert
+        assertEquals("A", teacher.getFirstName());
+        assertNull(teacher.getMiddleName());
+        assertNull(teacher.getLastName());
     }
 
 }
