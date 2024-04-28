@@ -2,6 +2,7 @@ package dk.kea.dat3js.hogwarts5.students;
 
 import dk.kea.dat3js.hogwarts5.house.HouseService;
 import dk.kea.dat3js.hogwarts5.prefects.PrefectService;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +13,12 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final HouseService houseService;
 
-    private final PrefectService prefectService;
 
-    public StudentService(StudentRepository studentRepository, HouseService houseService, PrefectService prefectService) {
+    public StudentService(StudentRepository studentRepository, HouseService houseService) {
         this.studentRepository = studentRepository;
         this.houseService = houseService;
-        this.prefectService = prefectService;
     }
+
 
     public List<StudentResponseDTO> findAll() {
         return studentRepository.findAll().stream().map(this::toDTO).toList();
@@ -114,7 +114,7 @@ public class StudentService {
         if (existingStudent.isPresent()) {
             Student studentToUpdate = existingStudent.get();
             //boolean isPrefectAllowed = isPrefectChangeAllowed(studentToUpdate);
-            boolean isPrefectAllowed = prefectService.isPrefectChangeAllowed(studentToUpdate);
+            boolean isPrefectAllowed = isPrefectChangeAllowed(studentToUpdate);
             if (!studentToUpdate.isPrefect() && !isPrefectAllowed) {
                 System.out.println("Prefect change not allowed");
                 return Optional.empty();
@@ -130,11 +130,13 @@ public class StudentService {
         }
     }
     public boolean isPrefectChangeAllowed(Student student) {
+        System.out.println("Checking if prefect change is allowed for" + student.getFullName() + " in house " + student.getHouse().getName() + " as a " + student.getGender() + " in year " + student.getSchoolYear() + "th year.");
+        System.out.println("Student's prefect status: " + student.isPrefect());
         if (!student.isPrefect()) {
             System.out.println("Student is not a prefect but will attempt to become one");
             // Check if the student is at or above year 5
             if (student.getSchoolYear() < 5) {
-                System.out.println("Student is not at or above year 5");
+                System.out.println("Student is not at year 5 - is instead " + student.getSchoolYear() + "th year");
                 return false;
             }
 

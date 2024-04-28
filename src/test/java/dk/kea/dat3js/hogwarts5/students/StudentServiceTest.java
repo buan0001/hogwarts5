@@ -34,8 +34,6 @@ class StudentServiceTest {
 
     @MockBean
     private HouseService houseService;
-    @MockBean
-    private PrefectService prefectService;
 
     @BeforeEach
     void setUp() {
@@ -61,36 +59,36 @@ class StudentServiceTest {
 
         when(studentRepository.save(any(Student.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        when(prefectService.isPrefectChangeAllowed(any(Student.class))).thenAnswer(i -> {
-            Student student = i.getArgument(0);
-            System.out.println("Student's prefect status: " + student.isPrefect());
-            if (!student.isPrefect()) {
-                System.out.println("Student is not a prefect but will attempt to become one");
-                // Check if the student is at or above year 5
-                if (student.getSchoolYear() < 5) {
-                    System.out.println("Student is not at or above year 5");
-                    return false;
-                }
-
-                // Check if house already has two prefects - if the student to update is not already a prefect they will attempt to become one, which must fail
-                List<Student> prefectsInHouse = studentRepository.findAllByHouseNameAndPrefectIsTrue(student.getHouse().getName());
-                System.out.println("Prefects in house: " + prefectsInHouse.size());
-
-                if (prefectsInHouse.size() == 2) {
-                    System.out.println("House already has two prefects");
-                    return false;
-                }
-
-                // If there's already a prefect in the house of the same gender, also deny the request
-                boolean sameGenderPrefectExists = prefectsInHouse.stream().anyMatch(prefect -> prefect.getGender().equalsIgnoreCase(student.getGender()));
-                if (sameGenderPrefectExists) {
-                    System.out.println("House already has a prefect of that gender");
-                    return false;
-                }
-            }
-            System.out.println("Prefect change allowed");
-            return true;
-        });
+//        when(prefectService.isPrefectChangeAllowed(any(Student.class))).thenAnswer(i -> {
+//            Student student = i.getArgument(0);
+//            System.out.println("Student's prefect status: " + student.isPrefect());
+//            if (!student.isPrefect()) {
+//                System.out.println("Student is not a prefect but will attempt to become one");
+//                // Check if the student is at or above year 5
+//                if (student.getSchoolYear() < 5) {
+//                    System.out.println("Student is not at or above year 5");
+//                    return false;
+//                }
+//
+//                // Check if house already has two prefects - if the student to update is not already a prefect they will attempt to become one, which must fail
+//                List<Student> prefectsInHouse = studentRepository.findAllByHouseNameAndPrefectIsTrue(student.getHouse().getName());
+//                System.out.println("Prefects in house: " + prefectsInHouse.size());
+//
+//                if (prefectsInHouse.size() == 2) {
+//                    System.out.println("House already has two prefects");
+//                    return false;
+//                }
+//
+//                // If there's already a prefect in the house of the same gender, also deny the request
+//                boolean sameGenderPrefectExists = prefectsInHouse.stream().anyMatch(prefect -> prefect.getGender().equalsIgnoreCase(student.getGender()));
+//                if (sameGenderPrefectExists) {
+//                    System.out.println("House already has a prefect of that gender");
+//                    return false;
+//                }
+//            }
+//            System.out.println("Prefect change allowed");
+//            return true;
+//        });
     }
 
     public void setupMockHouses() {
@@ -106,7 +104,7 @@ class StudentServiceTest {
 
         Student student = new Student(1, "Harry", "James", "Potter", houseRepository.findById("Gryffindor").get(), 5, false, "male");
         students.add(student);
-        StudentService studentService = new StudentService(studentRepository, houseService, prefectService);
+        StudentService studentService = new StudentService(studentRepository, houseService);
 
         // Act
         Optional<StudentResponseDTO> updatedStudent = studentService.togglePrefect(1);
@@ -125,7 +123,7 @@ class StudentServiceTest {
 
         Student student = new Student(1, "Harry", "James", "Potter", houseRepository.findById("Gryffindor").get(), 1, false, "male");
         students.add(student);
-        StudentService studentService = new StudentService(studentRepository, houseService, prefectService);
+        StudentService studentService = new StudentService(studentRepository, houseService);
 
         // Act
         Optional<StudentResponseDTO> updatedStudent = studentService.togglePrefect(1);
@@ -147,7 +145,7 @@ class StudentServiceTest {
         Student student3 = new Student(3, "Ron", "Bilius", "Weasley", houseRepository.findById("Gryffindor").get(), 5, false, "male");
         students.addAll(List.of(student1, student2, student3));
 
-        StudentService studentService = new StudentService(studentRepository, houseService, prefectService);
+        StudentService studentService = new StudentService(studentRepository, houseService);
 
         // act
         Optional<StudentResponseDTO> updatedStudent = studentService.togglePrefect(3);
@@ -164,7 +162,7 @@ class StudentServiceTest {
         Student student3 = new Student(2, "Ron", "Bilius", "Weasley", houseRepository.findById("Gryffindor").get(), 5, false, "male");
         students.addAll(List.of(student1, student3));
 
-        StudentService studentService = new StudentService(studentRepository, houseService, prefectService);
+        StudentService studentService = new StudentService(studentRepository, houseService);
 
         // Act
         Optional<StudentResponseDTO> updatedStudent = studentService.togglePrefect(2);
@@ -181,7 +179,7 @@ class StudentServiceTest {
         Student student2 = new Student(2, "Hermione", "Jean", "Granger", houseRepository.findById("Gryffindor").get(), 5, true, "female");
         students.addAll(List.of(student1, student2));
 
-        StudentService studentService = new StudentService(studentRepository, houseService, prefectService);
+        StudentService studentService = new StudentService(studentRepository, houseService);
 
         // Act
 

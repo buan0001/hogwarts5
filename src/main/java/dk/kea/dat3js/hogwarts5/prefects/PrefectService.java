@@ -1,5 +1,7 @@
 package dk.kea.dat3js.hogwarts5.prefects;
 
+import dk.kea.dat3js.hogwarts5.exceptions.BadRequestException;
+import dk.kea.dat3js.hogwarts5.exceptions.StudentNotFoundException;
 import dk.kea.dat3js.hogwarts5.students.Student;
 import dk.kea.dat3js.hogwarts5.students.StudentRepository;
 import dk.kea.dat3js.hogwarts5.students.StudentResponseDTO;
@@ -13,6 +15,7 @@ import java.util.Optional;
 
 @Service
 public class PrefectService {
+
 
     private final StudentRepository studentRepository;
 
@@ -28,13 +31,23 @@ public class PrefectService {
         return studentRepository.findAllByPrefectIsTrue().stream().map(studentService::toDTO).toList();
     }
 
-    public Optional<StudentResponseDTO> getPrefect(int id) {
+    public StudentResponseDTO getPrefect(int id) {
+        System.out.println("Amount of students: " + studentRepository.count());
+        System.out.println("Amount of prefects: " + studentRepository.countByPrefectIsTrue());
+        studentRepository.findAll().forEach(student -> System.out.println("name: " + student.getFullName() + "prefect status: " + student.isPrefect() + " id: " + student.getId()));
         Optional<Student> foundStudent = studentRepository.findById(id);
 
-        if (foundStudent.isPresent() && foundStudent.get().isPrefect()) {
-            return Optional.ofNullable(studentService.toDTO(foundStudent.get()));
+        if (foundStudent.isPresent()) {
+            if ( foundStudent.get().isPrefect()) {
+                return studentService.toDTO(foundStudent.get());
+            }
+            else {
+                System.out.println("Student is not a prefect " + foundStudent.get().getFullName() + " " + foundStudent.get().isPrefect());
+                throw new BadRequestException("Student is not a prefect");
+            }
         } else {
-            return Optional.empty();
+
+            throw new StudentNotFoundException("Student not found");
         }
     }
 
@@ -43,58 +56,33 @@ public class PrefectService {
         return studentRepository.findAllByHouseNameAndPrefectIsTrue(house).stream().map(studentService::toDTO).toList();
     }
 
-    public Optional<StudentResponseDTO> removePrefect(int id) {
+    public StudentResponseDTO removePrefect(int id) {
         Optional<Student> foundStudent = studentRepository.findById(id);
         if (foundStudent.isPresent()) {
             Student student = foundStudent.get();
             if (student.isPrefect()) {
                 student.setPrefect(false);
-                return Optional.of(studentService.toDTO(studentRepository.save(student)) );
+                return studentService.toDTO(studentRepository.save(student) );
             }
+            System.out.println("Student is not a prefect " + student.getFullName() + " " + student.isPrefect());
+            throw new BadRequestException("Student is not a prefect");
         }
-        return Optional.empty();
+        throw new StudentNotFoundException("Student not found");
     }
 
-    public Optional<StudentResponseDTO> promoteToPrefect(Student prefect) {
-        Optional<Student> student = studentRepository.findById(prefect.getId());
+    public StudentResponseDTO promoteToPrefect(int studentId) {
+        Optional<Student> student = studentRepository.findById(studentId);
         if (student.isPresent()) {
             Student studentToUpdate = student.get();
-            if (!studentToUpdate.isPrefect() && isPrefectChangeAllowed(studentToUpdate)) {
+            if (!studentToUpdate.isPrefect() && studentService.isPrefectChangeAllowed(studentToUpdate)) {
                 studentToUpdate.setPrefect(true);
-                return Optional.of(studentService.toDTO(studentRepository.save(studentToUpdate)) );
+                return studentService.toDTO(studentRepository.save(studentToUpdate) );
             }
+            System.out.println("Student is already a prefect or does not meet the requirements");
+            throw new BadRequestException("Student is not a prefect");
         }
-            return Optional.empty();
+        System.out.println("No student found");
+        throw new StudentNotFoundException("Student not found");
     }
 
-    public boolean isPrefectChangeAllowed(Student student) {
-        System.out.println("Checking if prefect change is allowed for" + student.getFullName() + " in house " + student.getHouse().getName() + " as a " + student.getGender() + " in year " + student.getSchoolYear() + "th year.");
-        System.out.println("Student's prefect status: " + student.isPrefect());
-        if (!student.isPrefect()) {
-            System.out.println("Student is not a prefect but will attempt to become one");
-            // Check if the student is at or above year 5
-            if (student.getSchoolYear() < 5) {
-                System.out.println("Student is not at year 5 - is instead " + student.getSchoolYear() + "th year");
-                return false;
-            }
-
-            // Check if house already has two prefects - if the student to update is not already a prefect they will attempt to become one, which must fail
-            List<Student> prefectsInHouse = studentRepository.findAllByHouseNameAndPrefectIsTrue(student.getHouse().getName());
-            System.out.println("Prefects in house: " + prefectsInHouse.size());
-
-            if (prefectsInHouse.size() == 2) {
-                System.out.println("House already has two prefects");
-                return false;
-            }
-
-            // If there's already a prefect in the house of the same gender, also deny the request
-            boolean sameGenderPrefectExists = prefectsInHouse.stream().anyMatch(prefect -> prefect.getGender().equalsIgnoreCase(student.getGender()));
-            if (sameGenderPrefectExists) {
-                System.out.println("House already has a prefect of that gender");
-                return false;
-            }
-        }
-        System.out.println("Prefect change allowed");
-        return true;
-    }
 }
