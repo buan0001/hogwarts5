@@ -27,6 +27,16 @@ public class Teacher implements PersonWithNames {
     this(firstName, null, lastName, house, mainSubject, employmentDate);
   }
 
+  public Teacher(String fullName){
+    this.setFullName(fullName);
+  }
+
+  public Teacher(String firstname, String middleName, String lastName){
+    this.firstName = capitalize(firstname);
+    this.middleName = capitalize(middleName);
+    this.lastName = capitalize(lastName);
+  }
+
   public Teacher(String firstName, String middleName, String lastName, House house, String mainSubject, LocalDate employmentDate) {
     this.firstName = capitalize( firstName);
     this.middleName = capitalize( middleName);

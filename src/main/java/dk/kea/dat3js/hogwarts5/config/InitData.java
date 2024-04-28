@@ -36,23 +36,23 @@ public class InitData implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-      clearData();
+      //clearData();
         createHouses();
         createStudents();
         createTeachers();
     }
 
-    public void clearData() {
-        studentRepository.deleteAll();
-        studentRepository.flush();
-        teacherRepository.deleteAll();
-        teacherRepository.flush();
-        houseRepository.deleteAll();
-        houseRepository.flush();
-
-
-
-    }
+//    public void clearData() {
+//        studentRepository.deleteAll();
+//        studentRepository.flush();
+//        teacherRepository.deleteAll();
+//        teacherRepository.flush();
+//        houseRepository.deleteAll();
+//        houseRepository.flush();
+//
+//
+//
+//    }
 
     private void createStudents() {
         // To avoid creating and re-creating the same students, we first get all those that already exist
@@ -74,23 +74,23 @@ public class InitData implements CommandLineRunner {
         Student luna = new Student("Luna", null, "Lovegood", ravenclaw, 4, false, "female");
 
         //studentRepository.deleteAll();
-      studentRepository.save(harry);
-studentRepository.save(hermione);
-studentRepository.save(ron);
-studentRepository.save(neville);
-studentRepository.save(ginny);
-studentRepository.save(fred);
-studentRepository.save(george);
-studentRepository.save(percy);
-studentRepository.save(draco);
-studentRepository.save(cedric);
-studentRepository.save(luna);
+//      studentRepository.save(harry);
+//studentRepository.save(hermione);
+//studentRepository.save(ron);
+//studentRepository.save(neville);
+//studentRepository.save(ginny);
+//studentRepository.save(fred);
+//studentRepository.save(george);
+//studentRepository.save(percy);
+//studentRepository.save(draco);
+//studentRepository.save(cedric);
+//studentRepository.save(luna);
 
 
 
-//        existingStudents.addAll(List.of(harry, hermione, ron, neville, ginny, fred, george, percy, draco, cedric, luna));
-//      existingStudents.sort(Comparator.comparing(Student::getLastName));
-//        studentRepository.saveAll(existingStudents);
+        existingStudents.addAll(List.of(harry, hermione, ron, neville, ginny, fred, george, percy, draco, cedric, luna));
+
+        studentRepository.saveAll(existingStudents);
     }
 
     private void createTeachers() {

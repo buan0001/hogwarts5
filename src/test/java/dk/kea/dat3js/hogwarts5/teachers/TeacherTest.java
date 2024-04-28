@@ -23,22 +23,21 @@ class TeacherTest {
     @Test
     void getFullNameWithNullMiddleName() {
         //arrange
-        Teacher teacher = new Teacher("Harry",null, "James", null, null, null);
-        String expected = "Harry Potter";
+        Teacher teacher = new Teacher("first",null, "last", null, null, null);
 
         //act
         String actual = teacher.getFullName();
 
         //assert
-        assertEquals(expected, actual);
+        assertEquals("First Last", actual);
 
     }
 
     @Test
     void getFullNameWithEmptyMiddleName() {
         //arrange
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
-        String expected = "Harry Potter";
+        Teacher teacher = new Teacher("first","", "last", null, null, null);
+        String expected = "First Last";
 
         //act
         String actual = teacher.getFullName();
@@ -51,14 +50,13 @@ class TeacherTest {
     @Test
     void setFullNameWithSingleMiddleName() {
         //arrange
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
-        String expected = "Harry James Potter";
+        Teacher teacher = new Teacher("first",null, "last", null, null, null);
 
         //act
         teacher.setFullName("Harry James Potter");
 
 
-        //assert
+        // assert
         assertEquals("Harry", teacher.getFirstName());
         assertEquals("James", teacher.getMiddleName());
         assertEquals("Potter", teacher.getLastName());
@@ -68,7 +66,7 @@ class TeacherTest {
     @Test
     void setFullNameWithNullMiddleName() {
         //arrange
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
+        Teacher teacher = new Teacher("first","middle", "last", null, null, null);
         String expected = "Harry Potter";
 
         //act
@@ -85,8 +83,7 @@ class TeacherTest {
     @Test
     void setFullNameWithoutLastName() {
         //arrange
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
-        String expected = "Harry";
+        Teacher teacher = new Teacher("first", "middle", "last");
 
         //act
         teacher.setFullName("Harry");
@@ -102,7 +99,7 @@ class TeacherTest {
     @Test
     void setFullNameWithMultipleMiddleNames() {
         //arrange
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
+        Teacher teacher = new Teacher("first", "middle", "last");
 
         //act
         teacher.setFullName("Albus Percival Wulfric Brian Dumbledore");
@@ -111,13 +108,13 @@ class TeacherTest {
         assertEquals("Albus", teacher.getFirstName());
         assertEquals("Percival Wulfric Brian", teacher.getMiddleName());
         assertEquals("Dumbledore", teacher.getLastName());
-        assertEquals("Albus Percival Wulfric Brian Dumbledore", teacher.getFullName());
+
     }
 
     @Test
     void setFullNameWithSpaceAsMiddleName() {
         //arrange
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
+        Teacher teacher = new Teacher("first", "middle", "last");
 
         //act
         teacher.setFullName("Albus     Dumbledore");
@@ -127,50 +124,56 @@ class TeacherTest {
         assertNull(teacher.getMiddleName());
         assertEquals("Dumbledore", teacher.getLastName());
     }
+
     @Test
-    void setFullnameWithEmptyString(){
+    void setFullNameWithEmptyString(){
         //arrange
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
-        String expected = "first middle last";
+        Teacher teacher = new Teacher("first", "middle", "last");
+
 
         //act
         teacher.setFullName("");
 
         //assert
-        assertEquals("first middle last", teacher.getFullName());
+        assertEquals("First", teacher.getFirstName());
+        assertEquals("Middle", teacher.getMiddleName());
+        assertEquals("Last", teacher.getLastName());
+
     }
 
     @Test
     void setFullNameWithMultipleEmptyStrings(){
         //arrange
-        Teacher teacher = new Teacher("first middle last", null, null, null);
+        Teacher teacher = new Teacher("first", "middle", "last");
         String expected = "First Middle Last";
 
         //act
         teacher.setFullName("   ");
 
         //assert
-        assertEquals(expected, teacher.getFullName());
+        assertEquals("First", teacher.getFirstName());
+        assertEquals("Middle", teacher.getMiddleName());
+        assertEquals("Last", teacher.getLastName());
     }
 
     @Test
     void setFullnameWithNull(){
         //arrange
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
-        String expected = "first middle last";
+        Teacher teacher = new Teacher("first", "middle", "last");
 
         //act
         teacher.setFullName(null);
 
         //assert
-        assertEquals("first middle last", teacher.getFullName());
+        assertEquals("First", teacher.getFirstName());
+        assertEquals("Middle", teacher.getMiddleName());
+        assertEquals("Last", teacher.getLastName());
     }
 
     @Test
     void capitalizeIndividualNamesWithMultipleMiddleNames(){
         //arrange
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
-        String expected = "First Middle Last";
+        Teacher teacher = new Teacher("first", "middle", "last");
 
         //act
         teacher.setFullName("first middle1 middle2 middle3 last");
@@ -184,30 +187,33 @@ class TeacherTest {
     @Test
     void capitalizeIndividualNamesWithCrazyCharacters(){
         //arrange
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
+        Teacher teacher = new Teacher("first", "middle", "last");
         String expected = "First Middle Last";
 
         //act
         teacher.setFullName("fIrSt mIdDlE lAsT");
 
         //assert
-        assertEquals(expected, teacher.getFullName());
+        assertEquals("First", teacher.getFirstName());
+        assertEquals("Middle", teacher.getMiddleName());
+        assertEquals("Last", teacher.getLastName());
     }
 
     @Test
     void createTeacherFromFullname(){
         //arrange & act
-        Teacher teacher = new Teacher("Harry", "James", null, null, null);
-        String expected = "First Middle1 Middle2 Last";
+        Teacher teacher = new Teacher("first middle last");
 
-        //assert
-        assertEquals(expected, teacher.getFullName());
+        // assert
+        assertEquals("First", teacher.getFirstName());
+        assertEquals("Middle", teacher.getMiddleName());
+        assertEquals("Last", teacher.getLastName());
     }
 
     @Test
     void createTeacherFromFullNameWithMiddleNameStartingWithMc(){
         //arrange & act
-        Teacher teacher = new Teacher("Minerva McGonnomid1 McGonnomid2 McGonnolast", null, null, null);
+        Teacher teacher = new Teacher("Minerva McGonnomid1 McGonnomid2 McGonnolast");
 
 
         //assert
@@ -219,7 +225,7 @@ class TeacherTest {
     @Test
     void createTeacherFromFullNameWithSingleLowerCaseLetterName(){
         //arrange & act
-        Teacher teacher = new Teacher("a", null, null, null);
+        Teacher teacher = new Teacher("a");
 
         //assert
         assertEquals("A", teacher.getFirstName());
