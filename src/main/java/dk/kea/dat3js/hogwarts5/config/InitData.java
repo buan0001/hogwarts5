@@ -38,17 +38,18 @@ public class InitData implements CommandLineRunner {
 
   private void createStudents() {
     // To avoid creating and re-creating the same students, we first get all those that already exist
-    Set<Student> existingStudents = new HashSet<>();
-    existingStudents.addAll(studentRepository.findAll());
+    List <Student> existingStudents = new ArrayList<>();
+    //Set<Student> existingStudents = new HashSet<>();
+    // existingStudents.addAll(studentRepository.findAll());
 
     Student harry = new Student("Harry", "James", "Potter", gryffindor, 5, false, "male");
     Student hermione = new Student("Hermione", "Jean", "Granger", gryffindor, 5,false, "female");
     Student ron = new Student("Ron", "Bilius", "Weasley", gryffindor, 5,false,"male");
     Student neville = new Student("Neville", "Frank", "Longbottom", gryffindor, 5,false,"male");
-    Student ginny = new Student("Ginny", "Molly", "Weasley", gryffindor, 5,false,"female");
+    Student ginny = new Student("Ginny", "Molly", "Weasley", gryffindor, 5,true,"female");
     Student fred = new Student("Fred", "Gideon", "Weasley", gryffindor, 5,false,"male");
     Student george = new Student("George", "Fabian", "Weasley", gryffindor, 5,false,"male");
-    Student percy = new Student("Percy", "Ignatius", "Weasley", gryffindor, 5,false,"male");
+    Student percy = new Student("Percy", "Ignatius", "Weasley", gryffindor, 5,true,"male");
 
     Student draco = new Student("Draco", null, "Malfoy", slytherin, 5,false,"male");
     Student cedric = new Student("Cedric", null, "Diggory", hufflepuff, 6,false,"male");

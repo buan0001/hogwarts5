@@ -16,62 +16,65 @@ public class PrefectService {
 
     private final StudentRepository studentRepository;
 
+    private final StudentService studentService;
 
-    public PrefectService(StudentRepository studentRepository) {
+
+    public PrefectService(StudentRepository studentRepository, StudentService studentService) {
         this.studentRepository = studentRepository;
-
+        this.studentService = studentService;
     }
 
-    public List<Student> getAllPrefects() {
-        return studentRepository.findAllByPrefectIsTrue();
+    public List<StudentResponseDTO> getAllPrefects() {
+        return studentRepository.findAllByPrefectIsTrue().stream().map(studentService::toDTO).toList();
     }
 
-    public Optional<Student> getPrefect(int id) {
+    public Optional<StudentResponseDTO> getPrefect(int id) {
         Optional<Student> foundStudent = studentRepository.findById(id);
 
         if (foundStudent.isPresent() && foundStudent.get().isPrefect()) {
-            return foundStudent;
+            return Optional.ofNullable(studentService.toDTO(foundStudent.get()));
         } else {
             return Optional.empty();
         }
     }
 
 
-    public List<Student> getPrefectsByHouse(String house) {
-        return studentRepository.findAllByHouseNameAndPrefectIsTrue(house);
+    public List<StudentResponseDTO> getPrefectsByHouse(String house) {
+        return studentRepository.findAllByHouseNameAndPrefectIsTrue(house).stream().map(studentService::toDTO).toList();
     }
 
-    public Optional<Student> removePrefect(int id) {
+    public Optional<StudentResponseDTO> removePrefect(int id) {
         Optional<Student> foundStudent = studentRepository.findById(id);
-
         if (foundStudent.isPresent()) {
             Student student = foundStudent.get();
             if (student.isPrefect()) {
                 student.setPrefect(false);
-                return Optional.of(studentRepository.save(student));
-
+                return Optional.of(studentService.toDTO(studentRepository.save(student)) );
             }
         }
         return Optional.empty();
     }
 
-    public ResponseEntity<Student> promoteToPrefect(Student prefect) {
+    public Optional<StudentResponseDTO> promoteToPrefect(Student prefect) {
         Optional<Student> student = studentRepository.findById(prefect.getId());
-        if (student.isPresent() && !student.get().isPrefect() && isPrefectChangeAllowed(student.get())) {
-            student.get().setPrefect(true);
-            return ResponseEntity.ok().body(studentRepository.save(prefect));
+        if (student.isPresent()) {
+            Student studentToUpdate = student.get();
+            if (!studentToUpdate.isPrefect() && isPrefectChangeAllowed(studentToUpdate)) {
+                studentToUpdate.setPrefect(true);
+                return Optional.of(studentService.toDTO(studentRepository.save(studentToUpdate)) );
+            }
         }
-            return ResponseEntity.badRequest().build();
+            return Optional.empty();
     }
 
     public boolean isPrefectChangeAllowed(Student student) {
-        System.out.println("Checking if prefect change is allowed");
+        System.out.println("Checking if prefect change is allowed for" + student.getFullName() + " in house " + student.getHouse().getName() + " as a " + student.getGender() + " in year " + student.getSchoolYear() + "th year.");
         System.out.println("Student's prefect status: " + student.isPrefect());
         if (!student.isPrefect()) {
             System.out.println("Student is not a prefect but will attempt to become one");
             // Check if the student is at or above year 5
             if (student.getSchoolYear() < 5) {
-                System.out.println("Student is not at or above year 5");
+                System.out.println("Student is not at year 5 - is instead " + student.getSchoolYear() + "th year");
                 return false;
             }
 

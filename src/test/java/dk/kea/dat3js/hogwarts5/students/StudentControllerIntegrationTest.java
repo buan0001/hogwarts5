@@ -22,6 +22,11 @@ public class StudentControllerIntegrationTest {
     }
 
     @Test
+    void getAllStudents(){
+        webClient.get().uri("/students").exchange().expectStatus().isOk();
+    }
+
+    @Test
     void createStudentWithFullName(){
         webClient.post().uri("/students").contentType(MediaType.APPLICATION_JSON).bodyValue("""
                 {

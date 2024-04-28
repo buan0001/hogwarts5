@@ -75,7 +75,7 @@ public class StudentService {
         return existingStudent;
     }
 
-    private StudentResponseDTO toDTO(Student studentEntity) {
+    public StudentResponseDTO toDTO(Student studentEntity) {
         StudentResponseDTO dto = new StudentResponseDTO(
                 studentEntity.getId(),
                 studentEntity.getFirstName(),
@@ -91,7 +91,7 @@ public class StudentService {
         return dto;
     }
 
-    private Student fromDTO(StudentRequestDTO studentDTO) {
+    public Student fromDTO(StudentRequestDTO studentDTO) {
         Student entity = new Student(
                 studentDTO.firstName(),
                 studentDTO.middleName(),
