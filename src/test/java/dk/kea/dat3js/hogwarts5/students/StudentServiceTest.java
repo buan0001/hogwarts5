@@ -6,6 +6,7 @@ import dk.kea.dat3js.hogwarts5.house.HouseService;
 import dk.kea.dat3js.hogwarts5.prefects.PrefectService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.when;
 //@ActiveProfiles("test")
 
 @WebMvcTest(StudentService.class)
+
 class StudentServiceTest {
     List<Student> students = new ArrayList<>();
     @MockBean
